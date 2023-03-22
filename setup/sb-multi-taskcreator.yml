@@ -1,0 +1,220 @@
+# Copyright (c) 2017 Shotgun Software Inc.
+#
+# CONFIDENTIAL AND PROPRIETARY
+#
+# This work is provided "AS IS" and subject to the Shotgun Pipeline Toolkit
+# Source Code License included in this distribution package. See LICENSE.
+# By accessing, using, copying or modifying this work you indicate your
+# agreement to the Shotgun Pipeline Toolkit Source Code License. All rights
+# not expressly granted therein are reserved by Shotgun Software Inc.
+
+################################################################################
+
+includes:
+- ../app_locations.yml
+
+################################################################################
+
+# Task Creator
+settings.sb-multi-taskcreator:
+  display_name: Create New Task
+  task_name_delineator: '-'
+  location: "@apps.sb-multi-taskcreator.location"
+  task_templates:
+
+    # Character Template Definition
+    - template_name: Character Asset (simple)
+      unique_task_names: True
+      task_entity:
+        type: Asset
+        override_name: Asset
+        display_field: code
+        fields: ['code', 'sg_short_code']
+        filters: [['sg_asset_type', 'is', 'Character']]
+        order: [{'field_name': 'code', 'direction': 'asc' }]
+        limit: 0
+        entity_creation:
+            fields:
+              code:
+                required: True
+                hook: "{self}/standard_field_widget_hook.py"
+              sg_short_code:
+                required: True
+                hook: "{self}/shortcode_field_widget_hook.py"
+                hook_data:
+                  regex_input_mask: '[0-9a-z-]+'
+                  shortcode_format: '{user_input}'
+              description:
+                required: False
+                hook: "{self}/standard_field_widget_hook.py"
+              sg_asset_type:
+                required: True
+                filters: "[['project', 'is', {Project}]]"
+                display_field: code
+                order: [{'field_name': 'code', 'direction': 'asc'}]
+                hook: "{self}/standard_field_widget_hook.py"
+        child_entity:
+          type: Step    # new Steps cannot be made through this app
+          display_field: code
+          fields: ['code']
+          entity_link_field: entity_type
+          filters: [{ "filter_operator": "any",
+                      "filters": [["code", "is", 'Model'],
+                                  [ "code", "is", 'Rig']
+                      ]
+          }
+          ]
+          order: [{'field_name': 'code', 'direction': 'asc'}]
+          limit: 0
+      task_name_definitions:
+        - widget: regex
+          name: Task Name
+          required: True
+          regex: '[0-9a-zA-Z]+'
+
+    # Character Asset Skin
+    - template_name: Character Asset Skin (Complex)
+      unique_task_names: True
+      task_entity:
+        type: Asset
+        display_field: code
+        fields: ['code', 'sg_short_code']
+        filters: [['sg_asset_type', 'is', 'Character']]
+        order: [{'field_name': 'code', 'direction': 'asc' } ]
+        limit: 0
+        entity_creation:
+            fields:
+              code:
+                required: True
+                hook: "{self}/standard_field_widget_hook.py"
+              sg_short_code:
+                required: True
+                hook: "{self}/shortcode_field_widget_hook.py"
+                hook_data:
+                  regex_input_mask: '[0-9a-z-]+'
+                  shortcode_format: '{user_input}'
+              description:
+                required: False
+                hook: "{self}/standard_field_widget_hook.py"
+              sg_asset_type:
+                required: True
+                filters: "[['project', 'is', {Project}]]"
+                display_field: code
+                order: [{'field_name': 'code', 'direction': 'asc'}]
+                hook: "{self}/standard_field_widget_hook.py"
+        child_entity:
+          type: CustomEntity01    # Asset Component
+          display_field: code
+          entity_link_field: sg_asset
+          fields: ['code', 'sg_short_code']
+          filters: []
+          order: [{'field_name': 'code', 'direction': 'asc'}]
+          limit: 0
+          entity_creation:
+              fields:
+                code:
+                  required: True
+                  hook: "{self}/standard_field_widget_hook.py"
+                sg_short_code:
+                  required: True
+                  hook: "{self}/shortcode_field_widget_hook.py"
+                  hook_data:
+                    regex_input_mask: '[0-9a-zA-Z-]+'
+                    shortcode_format: '{Asset[sg_short_code]}_{user_input}'
+                description:
+                  required: False
+                  hook: "{self}/standard_field_widget_hook.py"
+                sg_asset:
+                  required: True
+                  filters: "[['id', 'is', {Asset[id]}], ['project', 'is', {Project}]]"
+                  display_field: code
+                  order: [{'field_name': 'code', 'direction': 'asc'}]
+                  hook: "{self}/standard_field_widget_hook.py"
+                task_template:
+                  required: False
+                  filters: "[['entity_type', 'is', '{CustomEntity01[type]}']]"
+                  hook: "{self}/standard_field_widget_hook.py"
+          child_entity:
+            type: CustomEntity02    # Asset Skin
+            display_field: code
+            entity_link_field: sg_asset_component
+            fields: ['code', 'sg_short_code']
+            filters: []
+            order: [{'field_name': 'code', 'direction': 'asc'}]
+            limit: 0
+            entity_creation:
+                fields:
+                  code:
+                    required: True
+                    hook: "{self}/standard_field_widget_hook.py"
+                  sg_short_code:
+                    required: True
+                    hook: "{self}/shortcode_field_widget_hook.py"
+                    hook_data:
+                      regex_input_mask: '[0-9a-zA-Z-]+'
+                      shortcode_format: '{CustomEntity01[sg_short_code]}_{user_input}'
+                  description:
+                    required: False
+                    hook: "{self}/standard_field_widget_hook.py"
+                  sg_asset_component:
+                    required: True
+                    filters: "[['id', 'is', {CustomEntity01[id]}], ['project', 'is', {Project}]]"
+                    display_field: code
+                    order: [{'field_name': 'code', 'direction': 'asc'}]
+                    hook: "{self}/standard_field_widget_hook.py"
+                  task_template:
+                    required: False
+                    filters: "[['entity_type', 'is', '{CustomEntity02[type]}']]"
+                    hook: "{self}/standard_field_widget_hook.py"
+            child_entity:
+              type: Step    # new Steps cannot be made through this app
+              display_field: code
+              entity_link_field: entity_type
+              fields: ['code']
+              filters: [{ "filter_operator": "any",
+                          "filters": [["code", "is", 'Animation'],
+                          ]
+              }
+              ]
+              order: [{'field_name': 'code', 'direction': 'asc'}]
+              limit: 0
+      task_name_definitions:
+        - widget: entity
+          name: Grip
+          required: False
+          entity_type: CustomEntity05
+          display_field: code
+          filters: "[['project', 'is', {project}]]"
+          fields: ['code']
+          order: []
+        - widget: entity
+          name: Weapon
+          required: False
+          entity_type: CustomEntity06
+          display_field: code
+          filters: "[['project', 'is', {project}]]"
+          fields: ['code']
+          order: []
+        - widget: entity
+          name: Class
+          required: True
+          entity_type: CustomEntity03
+          display_field: code
+          filters: "[['project', 'is', {project}]]"
+          fields: ['code']
+          order: []
+        - widget: regex
+          name: Descriptor
+          delineator: '-'
+          required: True
+          regex: '[0-9a-zA-Z-]+'
+        - widget: entity
+          name: Direction
+          delineator: '-'
+          required: False
+          entity_type: CustomEntity07
+          display_field: code
+          filters: "[['project', 'is', {project}]]"
+          fields: ['code']
+          order: []
+

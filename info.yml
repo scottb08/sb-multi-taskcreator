@@ -1,0 +1,44 @@
+# Copyright (c) 2023, Scott Ballard - Quantum Images Inc.
+#
+# Your use of this software as distributed in this GitHub repository, is governed by the MIT License
+#
+# Your use of the Shotgun Pipeline Toolkit is governed by the applicable
+# license agreement between you and Autodesk / Shotgun.
+#
+# Read LICENSE and SHOTGUN_LICENSE for full details about the licenses that pertain to this software.
+
+
+# Metadata defining the behaviour and requirements for this engine
+
+# expected fields in the configuration file for this engine
+configuration:
+    task_templates:
+        type: list
+        description: This setting defines the different Task Template entries. See the sb-multi-taskcreator.yml file
+                     in the setup folder for an example of the expected structure.
+        allows_empty: False
+        values:
+          type: dict
+          description: ''
+          values:
+              type: list
+              description: ''
+
+# this app works in all engines - it does not contain
+# any host application specific commands
+supported_engines:
+
+# the Shotgun fields that this engine needs in order to operate correctly
+requires_shotgun_fields:
+
+# More verbose description of this item
+display_name: "Task Creator App"
+description: "A Toolkit App to allow artists & production team to create new Tasks in Studio Pipeline"
+
+# Required minimum versions for this item to run
+requires_shotgun_version:
+requires_core_version: "v0.14.28"
+requires_engine_version:
+
+# the frameworks required to run this app
+frameworks:
