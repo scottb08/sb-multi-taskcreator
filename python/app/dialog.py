@@ -23,6 +23,8 @@ from .utils import get_custom_entity_display_name
 # standard toolkit logger
 logger = sgtk.platform.get_logger(__name__)
 
+overlay_widget = sgtk.platform.import_framework("tk-framework-qtwidgets", "overlay_widget")
+
 
 def show_dialog(app_instance):
     """
@@ -54,6 +56,7 @@ class AppDialog(QtGui.QWidget):
         self.ui.previousTaskLabel.setVisible(False)
         self.ui.taskUrlLabel.setVisible(False)
         self.ui.entityUrlLabel.setVisible(False)
+        self._overlay_widget = overlay_widget.ShotgunOverlayWidget(self)
 
         # most of the useful accessors are available through the Application class instance
         # it is often handy to keep a reference to this. You can get it via the following method:
@@ -316,27 +319,50 @@ class AppDialog(QtGui.QWidget):
         if self.ui.assignTaskCheckBox.isChecked():
             data['task_assignees'] = [self.context.user]
 
-        # Create Task
-        task = self.sg.create('Task', data)
-        logger.info(f'Task created: {pformat(task)}')
+        try:
+            # Create Task
+            self._overlay_widget.show_message(
+                '<h2 style="color:#4383a8">Creating Task, please wait...</h2>')
+            QtGui.QApplication.instance().processEvents()
+            task = self.sg.create('Task', data)
+            logger.info(f'Task created: {pformat(task)}')
 
-        # Display ShotGrid Task link
-        display_name = get_custom_entity_display_name(entity['type'])
+            # Display ShotGrid Task link
+            display_name = get_custom_entity_display_name(entity['type'])
 
-        self.ui.previousTaskLabel.setVisible(True)
-        self.ui.taskUrlLabel.setVisible(True)
-        self.ui.entityUrlLabel.setVisible(True)
-        task_url = f'{self.sg.base_url}/detail/Task/{task["id"]}'
-        entity_url = f'{self.sg.base_url}/detail/{entity["type"]}/{entity["id"]}'
-        self.ui.previousTaskLabel.setText(f'Last Task "{task["content"]}" Created:')
-        self.ui.taskUrlLabel.setText(f'<a style="color:#4383a8" href=\"{task_url}\">ShotGrid Task Link</a> ')
-        self.ui.entityUrlLabel.setText(f'<a style="color:#4383a8" href=\"{entity_url}\">'
-                                       f'ShotGrid {display_name} Link</a>')
+            self.ui.previousTaskLabel.setVisible(True)
+            self.ui.taskUrlLabel.setVisible(True)
+            self.ui.entityUrlLabel.setVisible(True)
+            task_url = f'{self.sg.base_url}/detail/Task/{task["id"]}'
+            entity_url = f'{self.sg.base_url}/detail/{entity["type"]}/{entity["id"]}'
+            self.ui.previousTaskLabel.setText(f'Last Task "{task["content"]}" Created:')
+            self.ui.taskUrlLabel.setText(f'<a style="color:#4383a8" href=\"{task_url}\">ShotGrid Task Link</a> ')
+            self.ui.entityUrlLabel.setText(f'<a style="color:#4383a8" href=\"{entity_url}\">'
+                                           f'ShotGrid {display_name} Link</a>')
 
-        if self.ui.switchTaskContextCheckBox.isChecked() and self.ui.switchTaskContextCheckBox.isEnabled():
-            self.switch_to_context(task)
+            if self.ui.switchTaskContextCheckBox.isChecked() and self.ui.switchTaskContextCheckBox.isEnabled():
+                self.switch_to_context(task)
 
-        self.validate_task_name()
+            QtGui.QMessageBox.information(
+                self,
+                'Task Created',
+                f'<h2 style="color:#4383a8">Task "{task["content"]}" created successfully.</h2>',
+                QtGui.QMessageBox.Ok
+            )
+
+        except Exception as err:
+            logger.error(f'Failed to create task: {err}')
+            QtGui.QMessageBox.critical(
+                self,
+                'Error',
+                f'<h2 style="color:#4383a8">Failed to create Task, please contact support\n{err}.</h2>',
+                QtGui.QMessageBox.Ok
+            )
+
+        finally:
+            self._overlay_widget.hide()
+            self.validate_task_name()
+
 
     def save_preferences(self):
         self.settings.setValue('switchTaskContext', int(self.ui.switchTaskContextCheckBox.isChecked()))
@@ -364,6 +390,21 @@ class AppDialog(QtGui.QWidget):
         """
 
         if self.engine.context_change_allowed:
-            context = self._app.sgtk.context_from_entity('Task', task['id'])
-            if context:
-                self.engine.change_context(context)
+
+            try:
+                self._overlay_widget.show_message(
+                    '<h2 style="color:#4383a8">Creating folder structure, please wait...</h2>')
+                QtGui.QApplication.instance().processEvents()
+                self._app.sgtk.create_filesystem_structure('Task', task['id'])
+
+                self._overlay_widget.show_message(
+                    '<h2 style="color:#4383a8">Switching context, please wait...</h2>')
+                QtGui.QApplication.instance().processEvents()
+                context = self._app.sgtk.context_from_entity('Task', task['id'])
+                if context:
+                    self.engine.change_context(context)
+
+            except Exception as err:
+                logger.error(f'Failed to create folder structure or switch context: {err}')
+                raise err
+
