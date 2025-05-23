@@ -25,7 +25,10 @@ class TaskRegexLineEditWidget(TaskTokenBaseWidget):
         if 'regex' not in definition:
             raise ValueError('"regex" key missing from Regex widget definition, please check configuration.')
 
-        regex_widget = QtGui.QRegExpValidator(QtCore.QRegExp(definition['regex']))
+        try:    # Pyside2
+            regex_widget = QtGui.QRegExpValidator(QtCore.QRegExp(definition['regex']))
+        except: # PySide6
+            regex_widget = QtGui.QRegularExpressionValidator(QtCore.QRegExp(definition['regex']))
         self.ui.lineEdit.setValidator(regex_widget)
 
     def text(self):
