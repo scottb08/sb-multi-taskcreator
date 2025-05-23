@@ -64,7 +64,10 @@ class AppDialog(QtGui.QWidget):
         self.engine = self._app.engine
         self.sg = self._app.shotgun
         self.context = self.engine.context
-        self.settings = QtCore.QSettings('My Studio\\Pipeline', self._app.instance_name)
+
+        # Setup app settings
+        sg_project = self.context.project['name']
+        self.settings = QtCore.QSettings(f'Shotgun\\Toolkit\\{sg_project}', self._app.instance_name)
 
         # logging happens via a standard toolkit logger
         logger.info(self._app.get_setting('display_name'))
@@ -90,14 +93,21 @@ class AppDialog(QtGui.QWidget):
                 self.engine.instance_name in ['tk-shell', 'tk-desktop', 'tk-shotgun']:
             self.ui.switchTaskContextCheckBox.setEnabled(False)
 
+        self.restore_preferences()
+
         # Signals
-        self.ui.taskTemplateComboBox.currentIndexChanged.connect(self.init)
+        self.ui.taskTemplateComboBox.currentIndexChanged.connect(self.template_init)
         self.ui.createTaskButton.released.connect(self.create_task)
         self.ui.taskTemplateComboBox.currentIndexChanged.connect(self.save_preferences)
         self.ui.assignTaskCheckBox.stateChanged.connect(self.save_preferences)
         self.ui.switchTaskContextCheckBox.stateChanged.connect(self.save_preferences)
+        self.ui.close_checkBox.stateChanged.connect(self.save_preferences)
 
-        self.restore_preferences()
+        # Restore previous template selection
+        task_creation_template = self.settings.value('taskCreationTemplate', None)
+        if task_creation_template:
+            index = self.ui.taskTemplateComboBox.findText(task_creation_template, QtCore.Qt.MatchCaseSensitive)
+            self.ui.taskTemplateComboBox.setCurrentIndex(index)
 
     def build_task_template_menu(self):
         # Add Block item
@@ -107,7 +117,7 @@ class AppDialog(QtGui.QWidget):
         for task_template in self.task_templates:
             self.ui.taskTemplateComboBox.addItem(task_template['template_name'], task_template)
 
-    def init(self):
+    def template_init(self):
         """
         Build UI widgets for user selected Task Template
         :return: None
@@ -363,24 +373,27 @@ class AppDialog(QtGui.QWidget):
             self._overlay_widget.hide()
             self.validate_task_name()
 
+            if self.ui.close_checkBox.isChecked():
+                self.close()
+
 
     def save_preferences(self):
         self.settings.setValue('switchTaskContext', int(self.ui.switchTaskContextCheckBox.isChecked()))
         self.settings.setValue('assignTaskToMe', int(self.ui.assignTaskCheckBox.isChecked()))
+        self.settings.setValue('closeDialog', int(self.ui.close_checkBox.isChecked()))
+
         if self.ui.taskTemplateComboBox.currentIndex() > 0:
             self.settings.setValue('taskCreationTemplate', self.ui.taskTemplateComboBox.currentText())
 
     def restore_preferences(self):
-        switch_task_context = self.settings.value('switchTaskContext', False)
+        switch_task_context = self.settings.value('switchTaskContext', True)
         self.ui.switchTaskContextCheckBox.setChecked(int(switch_task_context))
 
         assign_task = self.settings.value('assignTaskToMe', True)
         self.ui.assignTaskCheckBox.setChecked(int(assign_task))
 
-        task_creation_template = self.settings.value('taskCreationTemplate', None)
-        if task_creation_template:
-            index = self.ui.taskTemplateComboBox.findText(task_creation_template, QtCore.Qt.MatchCaseSensitive)
-            self.ui.taskTemplateComboBox.setCurrentIndex(index)
+        close_dialog = self.settings.value('closeDialog', True)
+        self.ui.close_checkBox.setChecked(int(close_dialog))
 
     def switch_to_context(self, task):
         """
@@ -390,7 +403,6 @@ class AppDialog(QtGui.QWidget):
         """
 
         if self.engine.context_change_allowed:
-
             try:
                 self._overlay_widget.show_message(
                     '<h2 style="color:#4383a8">Creating folder structure, please wait...</h2>')

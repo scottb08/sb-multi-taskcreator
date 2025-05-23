@@ -102,6 +102,12 @@ class Ui_Dialog(object):
 
         self.gridLayout_3.addWidget(self.switchTaskContextCheckBox, 0, 1, 1, 1)
 
+        self.close_checkBox = QCheckBox(self.groupBox)
+        self.close_checkBox.setObjectName(u"close_checkBox")
+        self.close_checkBox.setChecked(True)
+
+        self.gridLayout_3.addWidget(self.close_checkBox, 0, 2, 1, 1)
+
         self.gridLayout.addWidget(self.groupBox, 5, 0, 1, 1)
 
         self.groupBox_2 = QGroupBox(Dialog)
@@ -219,6 +225,7 @@ class Ui_Dialog(object):
         self.groupBox.setTitle(QCoreApplication.translate("Dialog", u"Creation Options", None))
         self.assignTaskCheckBox.setText(QCoreApplication.translate("Dialog", u"Assign Task to Me", None))
         self.switchTaskContextCheckBox.setText(QCoreApplication.translate("Dialog", u"Switch to Task Context", None))
+        self.close_checkBox.setText(QCoreApplication.translate("Dialog", u"Close After Creation", None))
         self.groupBox_2.setTitle(QCoreApplication.translate("Dialog", u"Task Creation Context", None))
         self.groupBox_3.setTitle(QCoreApplication.translate("Dialog", u"Task Name Definition", None))
         self.taskNameLabel.setText("")
