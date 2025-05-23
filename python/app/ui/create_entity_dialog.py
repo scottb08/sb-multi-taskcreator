@@ -1,113 +1,125 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'create_entity_dialog.ui'
-#
-#      by: pyside-uic 0.2.15 running on PySide 1.2.4
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file 'create_entity_dialog.ui'
+##
+## Created by: Qt User Interface Compiler version 5.15.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from tank.platform.qt import QtCore, QtGui
+from tank.platform.qt import QtCore
+for name, cls in QtCore.__dict__.items():
+    if isinstance(cls, type): globals()[name] = cls
+
+from tank.platform.qt import QtGui
+for name, cls in QtGui.__dict__.items():
+    if isinstance(cls, type): globals()[name] = cls
+
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
+        if not Dialog.objectName():
+            Dialog.setObjectName(u"Dialog")
         Dialog.resize(500, 400)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
+        font = QFont()
+        font.setFamily(u"Arial")
         Dialog.setFont(font)
-        self.verticalLayout = QtGui.QVBoxLayout(Dialog)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.dialogTitle = QtGui.QLabel(Dialog)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
+        self.verticalLayout = QVBoxLayout(Dialog)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.dialogTitle = QLabel(Dialog)
+        self.dialogTitle.setObjectName(u"dialogTitle")
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.dialogTitle.sizePolicy().hasHeightForWidth())
         self.dialogTitle.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(12)
-        self.dialogTitle.setFont(font)
-        self.dialogTitle.setStyleSheet("color: rgb(30, 167, 224);")
-        self.dialogTitle.setObjectName("dialogTitle")
+        font1 = QFont()
+        font1.setFamily(u"Arial")
+        font1.setPointSize(12)
+        self.dialogTitle.setFont(font1)
+        self.dialogTitle.setStyleSheet(u"color: rgb(30, 167, 224);")
+
         self.verticalLayout.addWidget(self.dialogTitle)
-        self.line_2 = QtGui.QFrame(Dialog)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
+
+        self.line_2 = QFrame(Dialog)
+        self.line_2.setObjectName(u"line_2")
         self.line_2.setFont(font)
-        self.line_2.setFrameShape(QtGui.QFrame.HLine)
-        self.line_2.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line_2.setObjectName("line_2")
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
         self.verticalLayout.addWidget(self.line_2)
-        self.fieldsVerticalLayout = QtGui.QVBoxLayout()
-        self.fieldsVerticalLayout.setObjectName("fieldsVerticalLayout")
+
+        self.fieldsVerticalLayout = QVBoxLayout()
+        self.fieldsVerticalLayout.setObjectName(u"fieldsVerticalLayout")
+
         self.verticalLayout.addLayout(self.fieldsVerticalLayout)
-        self.label = QtGui.QLabel(Dialog)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
+
+        self.label = QLabel(Dialog)
+        self.label.setObjectName(u"label")
         sizePolicy.setHeightForWidth(self.label.sizePolicy().hasHeightForWidth())
         self.label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(7)
-        self.label.setFont(font)
-        self.label.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.label.setObjectName("label")
+        font2 = QFont()
+        font2.setFamily(u"Arial")
+        font2.setPointSize(7)
+        self.label.setFont(font2)
+        self.label.setLayoutDirection(Qt.LeftToRight)
+        self.label.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+
         self.verticalLayout.addWidget(self.label)
-        self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.creationLabel = QtGui.QLabel(Dialog)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.creationLabel = QLabel(Dialog)
+        self.creationLabel.setObjectName(u"creationLabel")
         self.creationLabel.setEnabled(True)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.creationLabel.sizePolicy().hasHeightForWidth())
         self.creationLabel.setSizePolicy(sizePolicy)
-        self.creationLabel.setObjectName("creationLabel")
+
         self.horizontalLayout.addWidget(self.creationLabel)
-        self.entityUrlLabel = QtGui.QLabel(Dialog)
+
+        self.entityUrlLabel = QLabel(Dialog)
+        self.entityUrlLabel.setObjectName(u"entityUrlLabel")
         self.entityUrlLabel.setEnabled(True)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.entityUrlLabel.sizePolicy().hasHeightForWidth())
         self.entityUrlLabel.setSizePolicy(sizePolicy)
-        self.entityUrlLabel.setTextFormat(QtCore.Qt.RichText)
-        self.entityUrlLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.entityUrlLabel.setTextFormat(Qt.RichText)
+        self.entityUrlLabel.setAlignment(Qt.AlignCenter)
         self.entityUrlLabel.setOpenExternalLinks(True)
-        self.entityUrlLabel.setTextInteractionFlags(QtCore.Qt.TextBrowserInteraction)
-        self.entityUrlLabel.setObjectName("entityUrlLabel")
+        self.entityUrlLabel.setTextInteractionFlags(Qt.TextBrowserInteraction)
+
         self.horizontalLayout.addWidget(self.entityUrlLabel)
+
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.line = QtGui.QFrame(Dialog)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
+
+        self.line = QFrame(Dialog)
+        self.line.setObjectName(u"line")
         self.line.setFont(font)
-        self.line.setFrameShape(QtGui.QFrame.HLine)
-        self.line.setFrameShadow(QtGui.QFrame.Sunken)
-        self.line.setObjectName("line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
         self.verticalLayout.addWidget(self.line)
-        self.createEntityButton = QtGui.QPushButton(Dialog)
+
+        self.createEntityButton = QPushButton(Dialog)
+        self.createEntityButton.setObjectName(u"createEntityButton")
         self.createEntityButton.setEnabled(False)
-        font = QtGui.QFont()
-        font.setFamily("Arial")
-        font.setPointSize(12)
-        self.createEntityButton.setFont(font)
-        self.createEntityButton.setStyleSheet("QPushButton:enabled  {\n"
+        self.createEntityButton.setFont(font1)
+        self.createEntityButton.setStyleSheet(u"QPushButton:enabled  {\n"
 "    color: rgb(30, 167, 224);\n"
 "}")
-        self.createEntityButton.setObjectName("createEntityButton")
+
         self.verticalLayout.addWidget(self.createEntityButton)
 
         self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+        QMetaObject.connectSlotsByName(Dialog)
+    # setupUi
 
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Dialog", None, QtGui.QApplication.UnicodeUTF8))
-        self.dialogTitle.setText(QtGui.QApplication.translate("Dialog", "Create a New Enitty", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Dialog", "Bold fields are required", None, QtGui.QApplication.UnicodeUTF8))
-        self.creationLabel.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
-        self.entityUrlLabel.setText(QtGui.QApplication.translate("Dialog", "TextLabel", None, QtGui.QApplication.UnicodeUTF8))
-        self.createEntityButton.setText(QtGui.QApplication.translate("Dialog", "Create Entity", None, QtGui.QApplication.UnicodeUTF8))
-
+        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
+        self.dialogTitle.setText(QCoreApplication.translate("Dialog", u"Create a New Enitty", None))
+        self.label.setText(QCoreApplication.translate("Dialog", u"Bold fields are required", None))
+        self.creationLabel.setText(QCoreApplication.translate("Dialog", u"TextLabel", None))
+        self.entityUrlLabel.setText(QCoreApplication.translate("Dialog", u"TextLabel", None))
+        self.createEntityButton.setText(QCoreApplication.translate("Dialog", u"Create Entity", None))
+    # retranslateUi
